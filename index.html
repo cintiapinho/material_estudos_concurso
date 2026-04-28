@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PLN – Guia de Estudos Fatec 2026</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Georgia, serif; background: #f7f4ef; color: #2c2c2a; line-height: 1.7; }
+
+  header {
+    background: #1a3a2a;
+    color: #e8f5ee;
+    padding: 2rem 1.5rem 1.5rem;
+  }
+  header h1 { font-size: 1.5rem; font-weight: normal; letter-spacing: -0.5px; }
+  header p { font-size: 0.85rem; color: #9fdfbf; margin-top: 0.4rem; }
+  .badges { margin-top: 0.8rem; display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge {
+    font-family: monospace;
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid #4a8a6a;
+    color: #9fdfbf;
+  }
+
+  nav {
+    background: #112a1a;
+    display: flex;
+    overflow-x: auto;
+    gap: 0;
+  }
+  nav button {
+    background: none;
+    border: none;
+    color: #7abf9a;
+    padding: 0.9rem 1.2rem;
+    font-family: Georgia, serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  nav button:hover { color: #e8f5ee; }
+  nav button.active { color: #e8f5ee; border-bottom-color: #5fc98a; }
+
+  main { max-width: 780px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* METRICS */
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 2rem; }
+  .metric {
+    background: #fff;
+    border: 1px solid #d8d4cc;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .metric .num { font-size: 1.8rem; color: #1a3a2a; }
+  .metric .lbl { font-size: 0.75rem; color: #888; margin-top: 2px; }
+
+  /* CHAPTER CARDS */
+  .chapter {
+    background: #fff;
+    border: 1px solid #d8d4cc;
+    border-radius: 12px;
+    padding: 1.4rem;
+    margin-bottom: 1.2rem;
+  }
+  .chapter-num {
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: #5fc98a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .chapter h2 { font-size: 1.05rem; font-weight: bold; color: #1a3a2a; margin-bottom: 4px; }
+  .chapter .edital-tag {
+    font-size: 0.75rem;
+    color: #888;
+    font-style: italic;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #eee;
+  }
+  .chapter p, .chapter li { font-size: 0.9rem; color: #444; }
+  .chapter ul { padding-left: 1.3rem; margin-top: 0.5rem; }
+  .chapter li { margin-bottom: 5px; }
+  .chapter strong { color: #1a3a2a; }
+
+  .toggle-btn {
+    margin-top: 1rem;
+    background: none;
+    border: 1px solid #c8c4bc;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    color: #666;
+    cursor: pointer;
+    font-family: Georgia, serif;
+  }
+  .toggle-btn:hover { background: #f0ede8; }
+  .extra { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee; }
+  .extra.open { display: block; }
+
+  /* QUIZ */
+  .quiz-title {
+    font-size: 1rem;
+    color: #1a3a2a;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid #5fc98a;
+  }
+  .question {
+    background: #fff;
+    border: 1px solid #d8d4cc;
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1rem;
+  }
+  .q-num {
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: #5fc98a;
+    margin-bottom: 6px;
+  }
+  .q-text { font-size: 0.92rem; color: #222; margin-bottom: 1rem; line-height: 1.6; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .option:hover { background: #f0ede8; }
+  .option input { margin-top: 3px; flex-shrink: 0; accent-color: #1a3a2a; }
+  .option label { font-size: 0.87rem; color: #444; cursor: pointer; line-height: 1.5; }
+  .reveal-btn {
+    margin-top: 10px;
+    background: none;
+    border: 1px solid #c8c4bc;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    color: #666;
+    cursor: pointer;
+    font-family: Georgia, serif;
+  }
+  .reveal-btn:hover { background: #f0ede8; }
+  .answer {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: #eaf5ee;
+    border-left: 3px solid #5fc98a;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.85rem;
+    color: #1a3a2a;
+    line-height: 1.6;
+  }
+  .answer.show { display: block; }
+
+  /* EDITAL */
+  .edital-block {
+    background: #fff;
+    border: 1px solid #d8d4cc;
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1rem;
+  }
+  .edital-block h3 { font-size: 0.95rem; color: #1a3a2a; margin-bottom: 0.7rem; }
+  .edital-block li { font-size: 0.87rem; color: #444; margin-bottom: 5px; }
+  .edital-block ul { padding-left: 1.2rem; }
+  .highlight { color: #1a3a2a; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Para Conhecer Linguística Computacional</h1>
+  <p>Ferreira & Lopes · Editora Contexto, 2019</p>
+  <div class="badges">
+    <span class="badge">Concurso Fatec 2026</span>
+    <span class="badge">20 questões · 0,5pt cada</span>
+    <span class="badge">Nota mín. 7,0</span>
+    <span class="badge">Disciplina PLN 3023</span>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('resumos',this)">Resumos</button>
+  <button onclick="showTab('q1',this)">Cap. 1 – Python</button>
+  <button onclick="showTab('q2',this)">Cap. 2 – Corpus</button>
+  <button onclick="showTab('q3',this)">Cap. 3 – N-gramas</button>
+  <button onclick="showTab('q4',this)">Cap. 4 – Bayes</button>
+  <button onclick="showTab('edital',this)">Edital</button>
+</nav>
+
+<main>
+
+<!-- ===== RESUMOS ===== -->
+<div class="panel active" id="panel-resumos">
+
+  <div class="metrics">
+    <div class="metric"><div class="num">4</div><div class="lbl">capítulos</div></div>
+    <div class="metric"><div class="num">40</div><div class="lbl">questões</div></div>
+    <div class="metric"><div class="num">14</div><div class="lbl">acertos p/ passar</div></div>
+  </div>
+
+  <!-- CAP 1 -->
+  <div class="chapter">
+    <div class="chapter-num">Capítulo 1</div>
+    <h2>Noções gerais de programação em Python</h2>
+    <div class="edital-tag">Edital: Processamento de texto · Extração de características · Aprendizagem de máquina</div>
+    <p><strong>Por que Python?</strong> Linguagem de propósito geral com vasta coleção de módulos para PLN (NLTK, spaCy). Sintaxe legível e curva de aprendizado suave.</p>
+    <ul>
+      <li><strong>Algoritmos e programas:</strong> algoritmo = sequência finita de instruções; programa = algoritmo codificado em Python.</li>
+      <li><strong>Modos do interpretador:</strong> interativo (prompt >>>) e script (arquivo .py executado com F5 no IDLE).</li>
+      <li><strong>Variáveis e tipos:</strong> int, float, str, bool. Separador decimal é ponto (.), não vírgula.</li>
+      <li><strong>Sequências:</strong> strings (imutáveis), listas (mutáveis, [ ]), tuplas (imutáveis, ( )), conjuntos (set, sem ordem), dicionários (chave–valor, { }).</li>
+      <li><strong>Controle de fluxo:</strong> testes lógicos (==, !=, &lt;, &gt;, in), condicionais (if/elif/else), loops for e while.</li>
+      <li><strong>Funções:</strong> nomeadas (def) e anônimas (lambda). Parâmetros, return, variáveis locais vs. globais, recursão.</li>
+      <li><strong>Módulos externos:</strong> import / from...import; collections.defaultdict, re, statistics, NLTK, spaCy.</li>
+      <li><strong>Expressões regulares:</strong> metacaracteres (., *, +, ?, [], |, \b, \d, \w); re.findall, re.sub; raw strings r'...'.</li>
+    </ul>
+    <button class="toggle-btn" onclick="toggleExtra(this)">Ver conceitos extras ↓</button>
+    <div class="extra">
+      <ul>
+        <li><strong>NLTK:</strong> corpus, tokenizadores, etiquetadores; nltk.download() para dados.</li>
+        <li><strong>spaCy:</strong> nlp = spacy.load('pt'); tok.pos_ (classe gramatical), tok.orth_ (forma), tok.lemma_ (lema).</li>
+        <li><strong>Filtragem:</strong> compreensão de listas [x for x in lista if critério]; stop words = palavras funcionais removidas antes da análise.</li>
+        <li><strong>defaultdict(int):</strong> dicionário com valor padrão 0; evita KeyError em contagens.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CAP 2 -->
+  <div class="chapter">
+    <div class="chapter-num">Capítulo 2</div>
+    <h2>Análise quantitativa de corpus</h2>
+    <div class="edital-tag">Edital: Processamento de texto · KDT · Análise sintática</div>
+    <p><strong>Corpus:</strong> conjunto de textos digitais coletados segundo critérios linguísticos, finito, representativo e opcionalmente anotado.</p>
+    <ul>
+      <li><strong>Tipos:</strong> oral vs. escrito; geral vs. temático; não-anotado vs. anotado; monolingue vs. paralelo.</li>
+      <li><strong>Corpora no NLTK:</strong> Machado (obras literárias), Mac-Morpho (notícias + POS), Floresta Sintática, SUBTLEX-pt-BR.</li>
+      <li><strong>Leitura de arquivos:</strong> open('arq.txt', 'r', encoding='utf-8'); .read(); .close().</li>
+      <li><strong>Limpeza:</strong> strip(), split(), isalpha(), lower(); função limpar() personalizada.</li>
+      <li><strong>Contagens:</strong> types = palavras distintas; tokens = ocorrências; riqueza lexical = types / tokens.</li>
+      <li><strong>Hápax legômena:</strong> palavras com frequência = 1; indicam raridade e afetam modelos.</li>
+      <li><strong>Estatística descritiva:</strong> média, mediana, moda, variância, desvio-padrão; módulo statistics.</li>
+      <li><strong>TF-IDF:</strong> TF = freq. no doc / total de termos; IDF = log(N / df); TF-IDF = TF × IDF.</li>
+      <li><strong>POS tagging:</strong> spaCy atribui NOUN, VERB, ADJ, ADV, DET, ADP a cada token.</li>
+      <li><strong>Concordanciador:</strong> exibe contexto (KWIC) ao redor de expressão-alvo para análise qualitativa.</li>
+    </ul>
+    <button class="toggle-btn" onclick="toggleExtra(this)">Ver conceitos extras ↓</button>
+    <div class="extra">
+      <ul>
+        <li><strong>Gráficos:</strong> matplotlib.pyplot — plt.bar(), plt.pie(); parâmetros labels, autopct, title.</li>
+        <li><strong>Stemmer:</strong> NLTK RSLPStemmer reduz palavras à raiz; pode gerar formas incorretas (hápax falso).</li>
+        <li><strong>sorted() + lambda:</strong> ordenação de dicionários por valor; reverse=True para decrescente.</li>
+        <li><strong>Variância amostral (n-1):</strong> stat.variance; variância populacional (n): stat.pvariance.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CAP 3 -->
+  <div class="chapter">
+    <div class="chapter-num">Capítulo 3</div>
+    <h2>Modelos de n-gramas</h2>
+    <div class="edital-tag">Edital: Aprendizagem de máquina · Reconhecimento de voz · Gramáticas · Interpretação semântica</div>
+    <p><strong>N-gramas:</strong> sequências de n unidades linguísticas extraídas de um texto: unigrama (n=1), bigrama (n=2), trigrama (n=3).</p>
+    <ul>
+      <li><strong>Probabilidade:</strong> P(E) ∈ [0, 1]; soma de todos os eventos = 1.</li>
+      <li><strong>Probabilidade condicional:</strong> P(E|F) — chance de E dado F; base dos modelos de n-gramas.</li>
+      <li><strong>Assunção de Markov:</strong> P(wₙ | w₁…wₙ₋₁) ≈ P(wₙ | wₙ₋₁); só o contexto imediato importa.</li>
+      <li><strong>MLE:</strong> P(w₂|w₁) = C(w₁,w₂) / C(w₁); estimativa por contagem de n-gramas no corpus.</li>
+      <li><strong>Suavização de Laplace (add-1):</strong> P_Laplace = (C + 1) / (C_contexto + |V|); evita P = 0.</li>
+      <li><strong>Perplexidade:</strong> PP(T) = (1/P(p₁…pₙ))^(1/n); quanto menor, melhor o modelo.</li>
+      <li><strong>Aplicações:</strong> previsão de palavras, correção ortográfica, tradução automática, reconhecimento de voz.</li>
+      <li><strong>Corpus treino vs. teste:</strong> divisão típica 80/20; avaliação SEMPRE no corpus de teste.</li>
+      <li><strong>Dados esparsos:</strong> maioria dos n-gramas possíveis nunca ocorre no corpus → muitos zeros.</li>
+    </ul>
+    <button class="toggle-btn" onclick="toggleExtra(this)">Ver conceitos extras ↓</button>
+    <div class="extra">
+      <ul>
+        <li><strong>Marcadores &lt;s&gt; e &lt;/s&gt;:</strong> indicam início e fim de sentença para capturar padrões de fronteira.</li>
+        <li><strong>&lt;DES&gt;:</strong> marcador para hápax legômena filtrados do vocabulário de treinamento.</li>
+        <li><strong>tuple() em Python:</strong> ngramas(n, sent) retorna lista de tuplas usando range(len(sent) - n + 1).</li>
+        <li><strong>Chomsky (1955):</strong> "Colorless green ideas sleep furiously" — gramatical mas semanticamente absurda; n-gramas podem atribuir P > 0 a ela.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CAP 4 -->
+  <div class="chapter">
+    <div class="chapter-num">Capítulo 4</div>
+    <h2>Classificadores bayesianos ingênuos</h2>
+    <div class="edital-tag">Edital: Aprendizagem de máquina · Análise de sentimentos · KDT</div>
+    <p><strong>Classificação:</strong> tarefa de atribuir um dado (documento, mensagem) a uma classe predefinida com base em atributos (features).</p>
+    <ul>
+      <li><strong>Regra de Bayes:</strong> P(A|B) = P(B|A) × P(A) / P(B); calcula probabilidade posterior a partir de dados observados.</li>
+      <li><strong>Classificador ingênuo:</strong> assume independência condicional entre atributos dado a classe; ĉ = argmax P(c) ∏ P(fᵢ|c).</li>
+      <li><strong>MLE para classificadores:</strong> P(fᵢ|c) = contagem(fᵢ, c) / contagem(c); P(c) = Nc / N.</li>
+      <li><strong>Suavização (k):</strong> P = (C + k) / (C_total + k × |V|); evita P = 0 para palavras ausentes.</li>
+      <li><strong>Logaritmos:</strong> somar log P em vez de multiplicar P evita underflow numérico.</li>
+      <li><strong>Features:</strong> presença/frequência de palavras; vocabulário como espaço de atributos.</li>
+      <li><strong>Treinamento supervisionado:</strong> modelo aprende P(c) e P(fᵢ|c) a partir de corpus anotado.</li>
+      <li><strong>Avaliação:</strong> matriz de confusão (VP, FP, FN, VN); acurácia, precisão, cobertura (recall), medida-F.</li>
+    </ul>
+    <button class="toggle-btn" onclick="toggleExtra(this)">Ver conceitos extras ↓</button>
+    <div class="extra">
+      <ul>
+        <li><strong>Medida-F:</strong> F = 2 × (P × R) / (P + R); combina precisão e cobertura em uma métrica.</li>
+        <li><strong>Acurácia:</strong> (VP + VN) / total; pode ser enganosa em classes desbalanceadas.</li>
+        <li><strong>Precisão:</strong> VP / (VP + FP). <strong>Cobertura (Recall):</strong> VP / (VP + FN).</li>
+        <li><strong>WSD (Word Sense Disambiguation):</strong> determinar o sentido correto de palavra ambígua pelo contexto (ex.: "manga" = fruta ou roupa).</li>
+        <li><strong>Aplicações:</strong> spam, análise de sentimentos, POS tagging, classificação de textos.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== QUESTÕES CAP 1 ===== -->
+<div class="panel" id="panel-q1">
+  <div class="quiz-title">Capítulo 1 – Noções gerais de programação em Python</div>
+
+  <div class="question">
+    <div class="q-num">Questão 01</div>
+    <div class="q-text">Em Python, qual é a diferença fundamental entre uma lista e uma tupla?</div>
+    <div class="option"><input type="radio" name="q1_1"><label>(a) Listas usam colchetes e suportam tipos mistos; tuplas só aceitam strings.</label></div>
+    <div class="option"><input type="radio" name="q1_1"><label>(b) Listas são mutáveis e permitem alteração de itens; tuplas são imutáveis.</label></div>
+    <div class="option"><input type="radio" name="q1_1"><label>(c) Tuplas suportam indexação negativa; listas não suportam.</label></div>
+    <div class="option"><input type="radio" name="q1_1"><label>(d) Listas não podem ser percorridas por loops for; tuplas sim.</label></div>
+    <button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button>
+    <div class="answer"><strong>Resposta: (b).</strong> Listas ([ ]) são mutáveis — permitem append(), alteração por índice e remoção. Tuplas (( )) são imutáveis; uma vez criadas, seus valores não podem ser modificados. Ambas suportam tipos mistos e indexação negativa.</div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">Questão 02</div>
+    <div class="q-text">Qual o resultado de <code>re.findall(r'\b\w+\b', 'Olá, mundo!')</code> em Python?</div>
+    <div class="option"><input type="radio" name="q1_2"><label>(a) ['Olá, mundo!']</label></div>
+    <div class="option"><input type="radio" name="q1_2"><label>(b) ['Olá', 'mundo']</label></div>
+    <div class="option"><input type="radio" name="q1_2"><label>(c) ['O', 'l', 'á', 'm', 'u', 'n', 'd', 'o']</label></div>
+    <div class="option"><input type="radio" name="q1_2"><label>(d) []</label></div>
+    <button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button>
+    <div class="answer"><strong>Resposta: (b).</strong> \b marca fronteira de palavra e \w+ captura sequências alfanuméricas. A vírgula e a exclamação são separadores, então retorna ['Olá', 'mundo'].</div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">Questão 03</div>
+    <div class="q-text"><code>defaultdict(int)</code> do módulo <code>collections</code> é útil para contagem de palavras porque:</div>
+    <div class="option"><input type="radio" name="q1_3"><label>(a) Ordena as chaves automaticamente em ordem alfabética.</label></div>
+    <div class="option"><input type="radio" name="q1_3"><label>(b) Retorna 0 ao acessar uma chave inexistente, evitando KeyError.</label></div>
+    <div class="option"><input type="radio" name="q1_3"><label>(c) Impede a inserção de chaves duplicadas, garantindo unicidade.</label></div>
+    <div class="option"><input type="radio" name="q1_3"><label>(d) Converte valores automaticamente para string ao ser impressa.</label></div>
+    <button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button>
+    <div class="answer"><strong>Resposta: (b).</strong> defaultdict(int) inicializa qualquer chave nova com 0, permitindo contagem[palavra] += 1 sem verificar existência prévia. Muito usado para frequência de palavras em PLN.</div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">Questão 04</div>
+    <div class="q-text">Qual alternativa descreve corretamente uma função lambda em Python?</div>
+    <div class="option"><input type="radio" name="q1_4"><label>(a) É uma função que só pode ser chamada uma única vez no programa.</label></div>
+    <div class="option"><input type="radio" name="q1_4"><label>(b) É uma função anônima de expressão única, definida sem a palavra-chave def.</label></div>
+    <div class="option"><input type="radio" name="q1_4"><label>(c) É uma função obrigatoriamente recursiva sem retorno explícito.</label></div>
+    <div class="option"><input type="radio" name="q1_4"><label>(d) É uma função que recebe apenas argumentos do tipo string.</label></div>
+    <button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button>
+    <div class="answer"><strong>Resposta: (b).</strong> lambda par1, par2: expressão — define uma função anônima de uma linha, muito usada como argumento de sorted(), map() e filter().</div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">Questão 05</div>
+    <div class="q-text">Considere: <code>palavras = ['casa', 'rato', 'gato']; print(palavras[-1])</code>. O que é exibido?</div>
+    <div class="option"><input type="radio" name="q1_5"><label>(a) casa</label></div>
+    <div class="option"><input type="radio" name="q1_5"><label>(b) rato</label></div>
+    <div class="option"><input type="radio" name="q1_5"><label>(c) gato</label></div>
+    <div class="option"><input type="radio" name="q1_5"><label>(d) IndexError</label></div>
+    <button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button>
+    <div class="answer"><strong>Resposta: (c).</strong> Índices negativos contam a partir do final. palavras[-1] é o último elemento, 'gato'.</div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">Questão 06</div>
+    <div class="q-text">No NLTK, <code>corpus.stopwords.words('portuguese')</code> retorna:</div>
+    <div class="option"><input type="radio" name="q1_6"><label>(a) Uma lista de palavras raras e técnicas do português.</label></div>
+    <div class="option"><input type="radio" name="q1_6"><label>(b) Uma lista de palavras funcionais (artigos, preposições, conjunções) a serem removidas antes da análise.</label></div>
+    <div class="option"><input type="radio" name="q1_6"><label>(c) Um dicionário com a frequência de cada palavra do corpus.</label></div>
+    <div class="option"><input type="radio" name="q1_6"><label>(d) Os 1.000 substantivos mais frequentes do português.</label></div>
+    <button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button>
+    <div class="answer"><strong>Resposta: (b).</strong> Stop words são palavras de alta frequência e baixa carga semântica (de, a, o, que...). O NLTK fornece listas prontas por idioma para filtragem antes de análises de conteúdo.</div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">Questão 07</div>
+    <div class="q-text">Qual metacaractere de expressão regular casa exatamente 4 dígitos consecutivos?</div>
+    <div class="option"><input type="radio" name="q1_7"><label>(a) \w{4}</label></div>
+    <div class="option"><input type="radio" name="q1_7"><label>(b) \d{4}</label></div>
+    <div class="option"><input type="radio" name="q1_7"><label>(c) [0-9]+</label></div>
+    <div class="option"><input type="radio" name="q1_7"><label>(d) \b4\b</label></div>
+    <button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button>
+    <div class="answer"><strong>Resposta: (b).</strong> \d corresponde a qualquer dígito [0-9] e {4} especifica exatamente 4 repetições. \w inclui letras e underscore; [0-9]+ casa um ou mais dígitos (não exatamente 4).</div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">Questão 08</div>
+    <div class="q-text">Em spaCy, o atributo <code>tok.pos_</code> de um token retorna:</div>
+    <div class="option"><input type="radio" name="q1_8"><label>(a) A forma ortográfica original do token.</label></div>
+    <div class="option"><input type="radio" name="q1_8"><label>(b) A classe gramatical do token (NOUN, VERB, ADJ etc.).</label></div>
+    <div class="option"><input type="radio" name="q1_8"><label>(c) O índice numérico do token na sentença.</label></div>
+    <div class="option"><input type="radio" name="q1_8"><label>(d) A probabilidade do token no modelo de linguagem.</label></div>
+    <button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button>
+    <div class="answer"><strong>Resposta: (b).</strong> tok.pos_ retorna a etiqueta morfossintática (POS tag) universal. tok.orth_ retorna a forma ortográfica; tok.lemma_ retorna o lema.</div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">Questão 09</div>
+    <div class="q-text">Qual a diferença entre os modos interativo e script no interpretador Python?</div>
+    <div class="option"><input type="radio" name="q1_9"><label>(a) O modo interativo exige declaração de tipos; o script é tipado dinamicamente.</label></div>
+    <div class="option"><input type="radio" name="q1_9"><label>(b) No modo interativo cada expressão é avaliada imediatamente; no script, o arquivo inteiro é executado de uma vez ao rodar.</label></div>
+    <div class="option"><input type="radio" name="q1_9"><label>(c) Scripts só podem usar funções da biblioteca padrão; o modo interativo permite módulos externos.</label></div>
+    <div class="option"><input type="radio" name="q1_9"><label>(d) O modo interativo salva automaticamente o código em disco; o script não.</label></div>
+    <button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button>
+    <div class="answer"><strong>Resposta: (b).</strong> No modo interativo (>>>), cada linha é interpretada e o resultado aparece imediatamente. No modo script (.py + F5), o arquivo completo é executado e resultados só aparecem com print().</div>
+  </div>
+
+  <div class="question">
+    <div class="q-num">Questão 10</div>
+    <div class="q-text">O loop <code>for x in range(2, 10, 3)</code> itera sobre quais valores?</div>
+    <div class="option"><input type="radio" name="q1_10"><label>(a) 2, 3, 4, 5, 6, 7, 8, 9</label></div>
+    <div class="option"><input type="radio" name="q1_10"><label>(b) 2, 5, 8</label></div>
+    <div class="option"><input type="radio" name="q1_10"><label>(c) 3, 6, 9</label></div>
+    <div class="option"><input type="radio" name="q1_10"><label>(d) 2, 4, 6, 8</label></div>
+    <button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button>
+    <div class="answer"><strong>Resposta: (b).</strong> range(início, fim, passo) → range(2, 10, 3) gera 2, 5, 8. Começa em 2, avança de 3 em 3, para antes de 10.</div>
+  </div>
+</div>
+
+<!-- ===== QUESTÕES CAP 2 ===== -->
+<div class="panel" id="panel-q2">
+  <div class="quiz-title">Capítulo 2 – Análise quantitativa de corpus</div>
+
+  <div class="question"><div class="q-num">Questão 01</div><div class="q-text">Riqueza lexical de um corpus é calculada como:</div><div class="option"><input type="radio" name="q2_1"><label>(a) Tokens / types</label></div><div class="option"><input type="radio" name="q2_1"><label>(b) Types / tokens</label></div><div class="option"><input type="radio" name="q2_1"><label>(c) Hápax / tokens</label></div><div class="option"><input type="radio" name="q2_1"><label>(d) Sentenças / palavras</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Riqueza lexical = types / tokens. Quanto maior, mais diverso é o vocabulário em relação ao tamanho do texto.</div></div>
+
+  <div class="question"><div class="q-num">Questão 02</div><div class="q-text">O que é um hápax legômeno?</div><div class="option"><input type="radio" name="q2_2"><label>(a) Palavra que aparece exatamente duas vezes no corpus.</label></div><div class="option"><input type="radio" name="q2_2"><label>(b) Palavra que aparece uma única vez no corpus.</label></div><div class="option"><input type="radio" name="q2_2"><label>(c) Palavra sem correspondência em outros idiomas.</label></div><div class="option"><input type="radio" name="q2_2"><label>(d) Forma verbal com raiz irregular.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Hápax legômena são palavras com frequência absoluta 1 no corpus. Indicam raridade lexical e afetam modelos de n-gramas (dados esparsos).</div></div>
+
+  <div class="question"><div class="q-num">Questão 03</div><div class="q-text">O componente IDF do TF-IDF serve para:</div><div class="option"><input type="radio" name="q2_3"><label>(a) Aumentar o peso de palavras que aparecem em muitos documentos.</label></div><div class="option"><input type="radio" name="q2_3"><label>(b) Reduzir o peso de palavras que aparecem em muitos documentos, pois são pouco informativas.</label></div><div class="option"><input type="radio" name="q2_3"><label>(c) Contar a frequência absoluta de um termo em um único documento.</label></div><div class="option"><input type="radio" name="q2_3"><label>(d) Normalizar o tamanho dos documentos pela média do corpus.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> IDF = log(N / df_t). Palavras como "de" e "a" têm IDF ≈ 0; palavras raras têm IDF alto, indicando maior relevância informacional.</div></div>
+
+  <div class="question"><div class="q-num">Questão 04</div><div class="q-text">Por que especificar encoding='utf-8' ao abrir arquivos de corpus em Python?</div><div class="option"><input type="radio" name="q2_4"><label>(a) Para que o arquivo seja gravado mais rapidamente no disco.</label></div><div class="option"><input type="radio" name="q2_4"><label>(b) Para garantir que caracteres acentuados do português sejam lidos corretamente.</label></div><div class="option"><input type="radio" name="q2_4"><label>(c) Para que o Python converta o texto automaticamente para maiúsculas.</label></div><div class="option"><input type="radio" name="q2_4"><label>(d) Para habilitar o modo de leitura binária do arquivo.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> UTF-8 é o padrão Unicode capaz de representar todos os caracteres do português (ã, ç, é, etc.). Sem especificá-lo o Python usa a codificação do SO, podendo causar erros.</div></div>
+
+  <div class="question"><div class="q-num">Questão 05</div><div class="q-text">A medida estatística central resistente a valores extremos (outliers) é:</div><div class="option"><input type="radio" name="q2_5"><label>(a) Média aritmética</label></div><div class="option"><input type="radio" name="q2_5"><label>(b) Desvio-padrão</label></div><div class="option"><input type="radio" name="q2_5"><label>(c) Mediana</label></div><div class="option"><input type="radio" name="q2_5"><label>(d) Variância</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (c).</strong> A mediana é o valor central da série ordenada e não é distorcida por outliers. A média é sensível a valores extremos.</div></div>
+
+  <div class="question"><div class="q-num">Questão 06</div><div class="q-text">O corpus Mac-Morpho disponível no NLTK é caracterizado por:</div><div class="option"><input type="radio" name="q2_6"><label>(a) Ser um corpus de língua oral com transcrições de diálogos.</label></div><div class="option"><input type="radio" name="q2_6"><label>(b) Conter notícias do jornal Folha de S. Paulo com anotação morfossintática.</label></div><div class="option"><input type="radio" name="q2_6"><label>(c) Ser formado por obras literárias do século XIX em domínio público.</label></div><div class="option"><input type="radio" name="q2_6"><label>(d) Ser um corpus paralelo português-inglês para tradução automática.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Mac-Morpho é um corpus de notícias da Folha de S. Paulo (1994) com anotação morfossintática automática revisada por linguistas.</div></div>
+
+  <div class="question"><div class="q-num">Questão 07</div><div class="q-text">Qual função separa as palavras de uma string pelo espaço, retornando uma lista?</div><div class="option"><input type="radio" name="q2_7"><label>(a) texto.strip()</label></div><div class="option"><input type="radio" name="q2_7"><label>(b) texto.split()</label></div><div class="option"><input type="radio" name="q2_7"><label>(c) texto.join()</label></div><div class="option"><input type="radio" name="q2_7"><label>(d) texto.replace()</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> str.split() divide pelo espaço (padrão) e retorna lista. strip() remove espaços nas bordas; join() concatena; replace() substitui substrings.</div></div>
+
+  <div class="question"><div class="q-num">Questão 08</div><div class="q-text">Em etiquetagem POS com spaCy, qual etiqueta corresponde a advérbios?</div><div class="option"><input type="radio" name="q2_8"><label>(a) NOUN</label></div><div class="option"><input type="radio" name="q2_8"><label>(b) VERB</label></div><div class="option"><input type="radio" name="q2_8"><label>(c) ADV</label></div><div class="option"><input type="radio" name="q2_8"><label>(d) DET</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (c).</strong> Tagset universal do spaCy: NOUN (substantivo), VERB (verbo), ADJ (adjetivo), ADV (advérbio), DET (artigo/determinante), PROPN (nome próprio), ADP (preposição).</div></div>
+
+  <div class="question"><div class="q-num">Questão 09</div><div class="q-text">A principal desvantagem do TF-IDF em coleções muito pequenas é:</div><div class="option"><input type="radio" name="q2_9"><label>(a) O cálculo se torna muito lento para execução em tempo real.</label></div><div class="option"><input type="radio" name="q2_9"><label>(b) O IDF fica pouco discriminativo, pois palavras importantes podem aparecer em todos os poucos documentos, gerando IDF ≈ 0.</label></div><div class="option"><input type="radio" name="q2_9"><label>(c) A fórmula do TF não pode ser aplicada a textos com menos de 1.000 tokens.</label></div><div class="option"><input type="radio" name="q2_9"><label>(d) O Python não possui módulos para TF-IDF com menos de 100 documentos.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Com poucos documentos, uma palavra relevante pode aparecer em todos eles, resultando em IDF = log(N/N) = 0, tornando o TF-IDF nulo mesmo para termos importantes.</div></div>
+
+  <div class="question"><div class="q-num">Questão 10</div><div class="q-text">O concordanciador (KWIC) no contexto de análise de corpus serve para:</div><div class="option"><input type="radio" name="q2_10"><label>(a) Traduzir automaticamente palavras entre idiomas usando contexto bilateral.</label></div><div class="option"><input type="radio" name="q2_10"><label>(b) Exibir uma expressão-alvo com seu contexto à esquerda e à direita, facilitando análise qualitativa.</label></div><div class="option"><input type="radio" name="q2_10"><label>(c) Verificar se dois textos são concordantes em número de tokens.</label></div><div class="option"><input type="radio" name="q2_10"><label>(d) Calcular a correlação estatística entre dois vocabulários distintos.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> O concordanciador apresenta a palavra buscada com N palavras de contexto à esquerda e à direita, permitindo análise do uso real da língua.</div></div>
+</div>
+
+<!-- ===== QUESTÕES CAP 3 ===== -->
+<div class="panel" id="panel-q3">
+  <div class="quiz-title">Capítulo 3 – Modelos de n-gramas</div>
+
+  <div class="question"><div class="q-num">Questão 01</div><div class="q-text">A Assunção de Markov, aplicada a modelos de bigramas, estabelece que:</div><div class="option"><input type="radio" name="q3_1"><label>(a) A probabilidade de uma palavra depende de todas as palavras anteriores da sentença.</label></div><div class="option"><input type="radio" name="q3_1"><label>(b) A probabilidade de uma palavra depende apenas da palavra imediatamente anterior.</label></div><div class="option"><input type="radio" name="q3_1"><label>(c) Todas as palavras têm probabilidade igual de ocorrência.</label></div><div class="option"><input type="radio" name="q3_1"><label>(d) A probabilidade de uma sentença é o produto das frequências absolutas de cada palavra.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> No bigrama, P(wₙ | w₁…wₙ₋₁) ≈ P(wₙ | wₙ₋₁). A Assunção de Markov simplifica ao considerar apenas o contexto imediato (n-1 palavras anteriores).</div></div>
+
+  <div class="question"><div class="q-num">Questão 02</div><div class="q-text">A estimativa MLE para o bigrama P(menino | esse) é calculada como:</div><div class="option"><input type="radio" name="q3_2"><label>(a) C(esse menino) + C(esse) / N</label></div><div class="option"><input type="radio" name="q3_2"><label>(b) C(esse menino) / C(esse)</label></div><div class="option"><input type="radio" name="q3_2"><label>(c) C(esse) / C(esse menino)</label></div><div class="option"><input type="radio" name="q3_2"><label>(d) C(menino) / N</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> P_MLE(menino | esse) = C(esse menino) / C(esse). Divide-se a contagem do bigrama pela contagem do contexto (unigrama anterior).</div></div>
+
+  <div class="question"><div class="q-num">Questão 03</div><div class="q-text">Por que a suavização de Laplace é necessária em modelos de n-gramas?</div><div class="option"><input type="radio" name="q3_3"><label>(a) Para acelerar o cálculo de probabilidades em corpora muito grandes.</label></div><div class="option"><input type="radio" name="q3_3"><label>(b) Para evitar que n-gramas ausentes no treinamento recebam probabilidade zero, inviabilizando o modelo.</label></div><div class="option"><input type="radio" name="q3_3"><label>(c) Para normalizar o vocabulário e remover palavras raras do modelo.</label></div><div class="option"><input type="radio" name="q3_3"><label>(d) Para aumentar a probabilidade das palavras mais frequentes no corpus.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Se um bigrama não ocorreu no treinamento, MLE atribui P = 0, zerando toda a probabilidade de qualquer sentença que o contenha. A suavização redistribui massa probabilística para cobrir n-gramas ausentes.</div></div>
+
+  <div class="question"><div class="q-num">Questão 04</div><div class="q-text">Perplexidade em modelos de linguagem é uma medida onde:</div><div class="option"><input type="radio" name="q3_4"><label>(a) Quanto maior o valor, melhor o modelo.</label></div><div class="option"><input type="radio" name="q3_4"><label>(b) Quanto menor o valor, melhor o modelo; indica que atribui probabilidades mais altas às sequências do corpus de teste.</label></div><div class="option"><input type="radio" name="q3_4"><label>(c) Modelos com perplexidade = 1 são inválidos.</label></div><div class="option"><input type="radio" name="q3_4"><label>(d) A perplexidade sempre deve ser calculada no corpus de treinamento.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> PP(T) = (1/P(p₁…pₙ))^(1/n). Avalia-se sempre no corpus de TESTE. Modelo bom → probabilidades altas no teste → perplexidade baixa.</div></div>
+
+  <div class="question"><div class="q-num">Questão 05</div><div class="q-text">Para que servem os marcadores &lt;s&gt; e &lt;/s&gt; ao construir modelos de n-gramas?</div><div class="option"><input type="radio" name="q3_5"><label>(a) São marcadores de HTML usados para formatar o texto antes da análise.</label></div><div class="option"><input type="radio" name="q3_5"><label>(b) Indicam início e fim de sentença, permitindo capturar padrões de início e encerramento de frases.</label></div><div class="option"><input type="radio" name="q3_5"><label>(c) Substituem palavras desconhecidas durante o treinamento.</label></div><div class="option"><input type="radio" name="q3_5"><label>(d) São separadores de parágrafos usados na limpeza do corpus.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> &lt;s&gt; e &lt;/s&gt; são convenções computacionais para fronteiras de sentença. No bigrama permitem modelar P(primeira palavra | início) e P(fim | última palavra).</div></div>
+
+  <div class="question"><div class="q-num">Questão 06</div><div class="q-text">Qual é o principal problema dos dados esparsos em modelos de trigramas?</div><div class="option"><input type="radio" name="q3_6"><label>(a) O modelo usa memória RAM excessiva para armazenar trigramas frequentes.</label></div><div class="option"><input type="radio" name="q3_6"><label>(b) A maioria das combinações possíveis de 3 palavras nunca ocorre no corpus, gerando muitos zeros na tabela de probabilidades.</label></div><div class="option"><input type="radio" name="q3_6"><label>(c) Trigramas não podem ser usados para previsão de palavras em tempo real.</label></div><div class="option"><input type="radio" name="q3_6"><label>(d) O Python não suporta estruturas de dados eficientes para trigramas com mais de 10.000 itens.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> O vocabulário V cria V³ combinações possíveis de trigramas. Mesmo corpora grandes cobrem uma fração mínima, resultando em tabelas dominadas por zeros.</div></div>
+
+  <div class="question"><div class="q-num">Questão 07</div><div class="q-text">A fórmula de suavização de Laplace para bigramas é:</div><div class="option"><input type="radio" name="q3_7"><label>(a) C(wₙ₋₁ wₙ) / C(wₙ₋₁)</label></div><div class="option"><input type="radio" name="q3_7"><label>(b) (C(wₙ₋₁ wₙ) + 1) / (C(wₙ₋₁) + |V|)</label></div><div class="option"><input type="radio" name="q3_7"><label>(c) C(wₙ₋₁ wₙ) / (C(wₙ₋₁) + N)</label></div><div class="option"><input type="radio" name="q3_7"><label>(d) (C(wₙ₋₁ wₙ) + |V|) / C(wₙ₋₁)</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Add-1: soma 1 ao numerador e |V| ao denominador para manter a normalização, pois cada bigrama possível ganhou +1. |V| = tamanho do vocabulário.</div></div>
+
+  <div class="question"><div class="q-num">Questão 08</div><div class="q-text">Em que tarefa os modelos de n-gramas detectam erros como "chutou a mola" (em vez de "bola")?</div><div class="option"><input type="radio" name="q3_8"><label>(a) Análise de sentimentos</label></div><div class="option"><input type="radio" name="q3_8"><label>(b) Tradução automática</label></div><div class="option"><input type="radio" name="q3_8"><label>(c) Detecção/correção de erros contextuais</label></div><div class="option"><input type="radio" name="q3_8"><label>(d) Reconhecimento de entidades nomeadas</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (c).</strong> Erros contextuais são ortograficamente corretos mas semanticamente errados. O modelo de bigramas atribui P("mola" | "chutou a") muito menor que P("bola" | "chutou a"), identificando o erro.</div></div>
+
+  <div class="question"><div class="q-num">Questão 09</div><div class="q-text">Qual afirmação sobre avaliação de modelos de n-gramas é CORRETA?</div><div class="option"><input type="radio" name="q3_9"><label>(a) O modelo deve ser avaliado no mesmo corpus do treinamento.</label></div><div class="option"><input type="radio" name="q3_9"><label>(b) A divisão padrão entre treinamento e teste é 50%–50%.</label></div><div class="option"><input type="radio" name="q3_9"><label>(c) O corpus de teste deve ser distinto do de treinamento; tipicamente reserva-se ~20% dos dados para teste.</label></div><div class="option"><input type="radio" name="q3_9"><label>(d) Modelos com perplexidade maior são preferíveis para reconhecimento de voz.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (c).</strong> Avaliar no corpus de treinamento causaria sobreajuste. A divisão típica é 80% treinamento / 20% teste (ou 70/15/15 incluindo validação).</div></div>
+
+  <div class="question"><div class="q-num">Questão 10</div><div class="q-text">"Colorless green ideas sleep furiously" (Chomsky, 1955) é relevante para modelos de n-gramas porque:</div><div class="option"><input type="radio" name="q3_10"><label>(a) É um exemplo de sentença impossível em qualquer idioma natural.</label></div><div class="option"><input type="radio" name="q3_10"><label>(b) Demonstra que modelos de n-gramas podem atribuir probabilidade não nula a sentenças gramaticais mas semanticamente absurdas.</label></div><div class="option"><input type="radio" name="q3_10"><label>(c) Prova que modelos probabilísticos são superiores a gramáticas gerativas.</label></div><div class="option"><input type="radio" name="q3_10"><label>(d) Serve de corpus de treinamento para detectar erros ortográficos em inglês.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Chomsky criou a frase para mostrar que gramaticalidade ≠ sensatez. Modelos de n-gramas podem atribuir P > 0 à frase se os bigramas individuais existirem no treino, sem capturar a incoerência semântica global.</div></div>
+</div>
+
+<!-- ===== QUESTÕES CAP 4 ===== -->
+<div class="panel" id="panel-q4">
+  <div class="quiz-title">Capítulo 4 – Classificadores bayesianos ingênuos</div>
+
+  <div class="question"><div class="q-num">Questão 01</div><div class="q-text">A "ingenuidade" do classificador bayesiano ingênuo refere-se à suposição de que:</div><div class="option"><input type="radio" name="q4_1"><label>(a) O modelo usa apenas palavras de até 5 letras como atributos.</label></div><div class="option"><input type="radio" name="q4_1"><label>(b) Os atributos (features) são condicionalmente independentes entre si, dada a classe.</label></div><div class="option"><input type="radio" name="q4_1"><label>(c) O corpus de treinamento não precisa ser rotulado manualmente.</label></div><div class="option"><input type="radio" name="q4_1"><label>(d) A probabilidade a priori de todas as classes é igual.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> O classificador "ingênuo" assume independência condicional: P(f₁, f₂,…,fₙ | c) = ∏ P(fᵢ | c). Raramente verdade na língua, mas simplifica o cálculo e produz bons resultados na prática.</div></div>
+
+  <div class="question"><div class="q-num">Questão 02</div><div class="q-text">Na avaliação de um classificador, a Precisão (Precision) é definida como:</div><div class="option"><input type="radio" name="q4_2"><label>(a) VP / (VP + VN)</label></div><div class="option"><input type="radio" name="q4_2"><label>(b) VP / (VP + FP)</label></div><div class="option"><input type="radio" name="q4_2"><label>(c) VP / (VP + FN)</label></div><div class="option"><input type="radio" name="q4_2"><label>(d) (VP + VN) / total</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Precisão = VP / (VP + FP): dos itens classificados como positivos, qual fração é de fato positiva. Cobertura = VP / (VP + FN). Acurácia = (VP + VN) / total.</div></div>
+
+  <div class="question"><div class="q-num">Questão 03</div><div class="q-text">Por que somar logaritmos de probabilidades em vez de multiplicá-las no classificador bayesiano?</div><div class="option"><input type="radio" name="q4_3"><label>(a) Logaritmos tornam o cálculo mais lento, mas mais preciso para vocabulários grandes.</label></div><div class="option"><input type="radio" name="q4_3"><label>(b) O produto de muitas probabilidades pequenas resulta em underflow numérico; somar log-probabilidades evita esse problema.</label></div><div class="option"><input type="radio" name="q4_3"><label>(c) A soma de logaritmos é equivalente à divisão de probabilidades, simplificando a regra de Bayes.</label></div><div class="option"><input type="radio" name="q4_3"><label>(d) Logaritmos eliminam a necessidade de suavização no modelo.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Multiplicar centenas de probabilidades entre 0 e 1 resulta em números menores que o mínimo representável por float (underflow). Como log(a×b) = log a + log b, somar logs é equivalente e numericamente estável.</div></div>
+
+  <div class="question"><div class="q-num">Questão 04</div><div class="q-text">Qual a diferença entre Cobertura (Recall) e Acurácia?</div><div class="option"><input type="radio" name="q4_4"><label>(a) Cobertura mede acertos totais; acurácia mede apenas os acertos na classe positiva.</label></div><div class="option"><input type="radio" name="q4_4"><label>(b) Cobertura (VP/VP+FN) mede a fração dos verdadeiros positivos recuperados; acurácia (VP+VN)/total mede a taxa geral de acertos.</label></div><div class="option"><input type="radio" name="q4_4"><label>(c) Acurácia e cobertura são métricas idênticas com nomes diferentes.</label></div><div class="option"><input type="radio" name="q4_4"><label>(d) Cobertura penaliza falsos positivos; acurácia ignora erros de classificação positiva.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Cobertura = VP / (VP + FN): dos positivos reais, quantos foram detectados? Acurácia = (VP + VN) / total: taxa geral de acertos. Acurácia pode ser enganosa em datasets desbalanceados.</div></div>
+
+  <div class="question"><div class="q-num">Questão 05</div><div class="q-text">A Medida-F combina precisão e cobertura porque:</div><div class="option"><input type="radio" name="q4_5"><label>(a) É a soma aritmética das duas métricas dividida por 100.</label></div><div class="option"><input type="radio" name="q4_5"><label>(b) Alta precisão e baixa cobertura (ou vice-versa) são igualmente indesejáveis; a F resume o trade-off em uma única métrica.</label></div><div class="option"><input type="radio" name="q4_5"><label>(c) É obrigatória por norma para avaliações de classificadores de spam.</label></div><div class="option"><input type="radio" name="q4_5"><label>(d) Elimina a necessidade de corpus de teste separado.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> F = 2 × (P × R) / (P + R). Um classificador pode ter alta precisão sendo muito conservador (muitos FN) ou alta cobertura sendo permissivo (muitos FP). A Medida-F penaliza ambos os extremos.</div></div>
+
+  <div class="question"><div class="q-num">Questão 06</div><div class="q-text">No contexto de classificação de spam com Naïve Bayes, o que são "atributos" (features)?</div><div class="option"><input type="radio" name="q4_6"><label>(a) As classes possíveis (spam e não-spam) que o classificador pode atribuir.</label></div><div class="option"><input type="radio" name="q4_6"><label>(b) Características observáveis usadas para classificar, como presença ou frequência de palavras na mensagem.</label></div><div class="option"><input type="radio" name="q4_6"><label>(c) Os parâmetros internos do classificador ajustados durante o teste.</label></div><div class="option"><input type="radio" name="q4_6"><label>(d) Os documentos de treinamento usados para inicializar o modelo.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Features são propriedades mensuráveis dos dados. Em PLN, atributos típicos incluem presença/ausência de palavras, n-gramas, POS tags, tamanho do texto, etc.</div></div>
+
+  <div class="question"><div class="q-num">Questão 07</div><div class="q-text">A Regra de Bayes P(A|B) = P(B|A) × P(A) / P(B) permite ao classificador:</div><div class="option"><input type="radio" name="q4_7"><label>(a) Calcular a probabilidade de uma classe dado os atributos observados, invertendo a probabilidade condicional.</label></div><div class="option"><input type="radio" name="q4_7"><label>(b) Remover palavras raras do vocabulário de treinamento automaticamente.</label></div><div class="option"><input type="radio" name="q4_7"><label>(c) Garantir que todas as classes tenham probabilidade a priori igual.</label></div><div class="option"><input type="radio" name="q4_7"><label>(d) Calcular a perplexidade do modelo de linguagem subjacente.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (a).</strong> Queremos P(classe | mensagem), mas é mais fácil estimar P(mensagem | classe). A Regra de Bayes inverte essa relação: P(c | d) ∝ P(d | c) × P(c), eliminando P(d) por ser constante para todas as classes.</div></div>
+
+  <div class="question"><div class="q-num">Questão 08</div><div class="q-text">A suavização com parâmetro k no classificador bayesiano ingênuo serve para:</div><div class="option"><input type="radio" name="q4_8"><label>(a) Aumentar o peso das palavras mais frequentes no corpus de treinamento.</label></div><div class="option"><input type="radio" name="q4_8"><label>(b) Evitar probabilidade zero para palavras do vocabulário ausentes no corpus de treinamento de cada classe.</label></div><div class="option"><input type="radio" name="q4_8"><label>(c) Reduzir o tamanho do vocabulário removendo palavras com frequência abaixo de k.</label></div><div class="option"><input type="radio" name="q4_8"><label>(d) Normalizar as probabilidades para que a soma ultrapasse 1,0 ao combinar as classes.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> Sem suavização, P(palavra | spam) = 0 se a palavra nunca ocorreu em spam no treinamento, zerando toda a probabilidade do documento. A suavização add-k redistribui massa probabilística para cobrir palavras ausentes.</div></div>
+
+  <div class="question"><div class="q-num">Questão 09</div><div class="q-text">Word Sense Disambiguation (WSD) é uma tarefa de PLN que consiste em:</div><div class="option"><input type="radio" name="q4_9"><label>(a) Identificar todas as ocorrências de uma palavra e contar sua frequência total.</label></div><div class="option"><input type="radio" name="q4_9"><label>(b) Determinar, para uma palavra polissêmica em contexto, qual de seus sentidos está sendo usado.</label></div><div class="option"><input type="radio" name="q4_9"><label>(c) Traduzir automaticamente palavras de baixa frequência para sinônimos mais comuns.</label></div><div class="option"><input type="radio" name="q4_9"><label>(d) Segmentar textos em sentenças usando marcadores de pontuação.</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (b).</strong> WSD resolve ambiguidade lexical: "manga" pode ser fruta ou parte da roupa; "banco" pode ser instituição financeira ou assento. Classificadores bayesianos usam o contexto para selecionar o sentido correto.</div></div>
+
+  <div class="question"><div class="q-num">Questão 10</div><div class="q-text">Com 6.000 spams e 4.000 não-spams, a probabilidade a priori P(spam) estimada por MLE é:</div><div class="option"><input type="radio" name="q4_10"><label>(a) 0,40</label></div><div class="option"><input type="radio" name="q4_10"><label>(b) 0,50</label></div><div class="option"><input type="radio" name="q4_10"><label>(c) 0,60</label></div><div class="option"><input type="radio" name="q4_10"><label>(d) 0,67</label></div><button class="reveal-btn" onclick="toggleAnswer(this)">Ver resposta</button><div class="answer"><strong>Resposta: (c).</strong> P(spam) = N_spam / N_total = 6.000 / 10.000 = 0,60. A probabilidade a priori reflete a distribuição das classes no corpus de treinamento.</div></div>
+</div>
+
+<!-- ===== EDITAL ===== -->
+<div class="panel" id="panel-edital">
+
+  <div class="edital-block">
+    <h3>Formato da prova</h3>
+    <ul>
+      <li>20 questões de múltipla escolha · 0,5 pt cada = <span class="highlight">10 pts total</span></li>
+      <li>Nota mínima: <span class="highlight">7,0</span> = acertar pelo menos <span class="highlight">14 questões</span></li>
+      <li>Disciplina: 3023 – Processamento de Linguagem Natural</li>
+    </ul>
+  </div>
+
+  <div class="edital-block">
+    <h3>Mapeamento edital × livro</h3>
+    <ul>
+      <li><strong>Processamento de texto</strong> → Cap. 1 (Python, strings, limpeza) e Cap. 2 (corpus, tokenização)</li>
+      <li><strong>Extração de características (features)</strong> → Cap. 1 (filtragem) e Cap. 4 (features para Bayes)</li>
+      <li><strong>Análise sintática / Gramáticas</strong> → Cap. 1 (spaCy, POS) e Cap. 2 (Floresta Sintática, etiquetagem)</li>
+      <li><strong>Interpretação semântica</strong> → Cap. 3 (n-gramas, probabilidades) e Cap. 4 (WSD)</li>
+      <li><strong>KDT – Descoberta de conhecimento</strong> → Cap. 2 (TF-IDF, concordanciador, estatística)</li>
+      <li><strong>Análise de sentimentos</strong> → Cap. 4 (classificação de textos, Naïve Bayes)</li>
+      <li><strong>Aprendizagem de máquina</strong> → Cap. 3 (MLE, suavização) e Cap. 4 (treinamento, avaliação)</li>
+      <li><strong>Reconhecimento de voz</strong> → Cap. 3 (modelos de linguagem, sequências de palavras)</li>
+    </ul>
+  </div>
+
+  <div class="edital-block">
+    <h3>Fórmulas essenciais para memorizar</h3>
+    <ul>
+      <li><strong>TF:</strong> freq. do termo no doc / total de termos no doc</li>
+      <li><strong>IDF:</strong> log( N / df_t ) — N = total de docs, df_t = docs com o termo</li>
+      <li><strong>TF-IDF:</strong> TF × IDF</li>
+      <li><strong>MLE bigrama:</strong> P(w₂|w₁) = C(w₁,w₂) / C(w₁)</li>
+      <li><strong>Laplace bigrama:</strong> (C(w₁,w₂) + 1) / (C(w₁) + |V|)</li>
+      <li><strong>Perplexidade:</strong> PP = (1/P(seq))^(1/n) — quanto menor, melhor</li>
+      <li><strong>Precisão:</strong> VP / (VP + FP)</li>
+      <li><strong>Cobertura:</strong> VP / (VP + FN)</li>
+      <li><strong>Medida-F:</strong> 2 × (P × R) / (P + R)</li>
+      <li><strong>Acurácia:</strong> (VP + VN) / total</li>
+    </ul>
+  </div>
+
+  <div class="edital-block">
+    <h3>Dicas finais</h3>
+    <ul>
+      <li>Avaliação de modelos SEMPRE usa corpus de TESTE separado do treinamento</li>
+      <li>Perplexidade baixa = modelo melhor; perplexidade alta = modelo pior</li>
+      <li>Naïve Bayes assume independência condicional entre features (daí o "ingênuo")</li>
+      <li>TF-IDF: palavras muito frequentes em todos os docs têm IDF ≈ 0 → peso baixo</li>
+      <li>Hápax legômena afetam modelos de n-gramas → problema de dados esparsos</li>
+      <li>Suavização (Laplace / add-k) evita probabilidade zero em ambos os modelos</li>
+    </ul>
+  </div>
+
+</div>
+</main>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+function toggleAnswer(btn) {
+  const box = btn.nextElementSibling;
+  const open = box.classList.toggle('show');
+  btn.textContent = open ? 'Ocultar resposta' : 'Ver resposta';
+}
+function toggleExtra(btn) {
+  const box = btn.nextElementSibling;
+  const open = box.classList.toggle('open');
+  btn.textContent = open ? 'Ocultar conceitos extras ↑' : 'Ver conceitos extras ↓';
+}
+</script>
+</body>
+</html>
